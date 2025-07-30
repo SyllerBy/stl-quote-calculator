@@ -2,7 +2,7 @@
 /**
  * Plugin Name: STL Quote Widget
  * Description: 3D printing quote widget with customizable buttons, Gutenberg & Elementor support.
- * Version: 4.0
+ * Version: 4.2
  * Author: Anton GROGH
  */
 
@@ -41,8 +41,14 @@ function stlq_shortcode() {
 add_shortcode('stl_quote_widget', 'stlq_shortcode');
 
 // Gutenberg block
+function stlq_render_block($attributes, $content) {
+    return do_shortcode('[stl_quote_widget]');
+}
+
 function stlq_register_block() {
-    register_block_type(__DIR__ . '/');
+    register_block_type(__DIR__, array(
+        'render_callback' => 'stlq_render_block'
+    ));
 }
 add_action('init', 'stlq_register_block');
 
@@ -150,16 +156,16 @@ function stlq_render_settings_page() { ?>
 
                 <tr valign="top">
                     <th scope="row">Upload Button Colors</th>
-                    <td>Background: <input type="color" name="stlq_upload_bg" value="<?php echo esc_attr(get_option('stlq_upload_bg', '#f0f0f0')); ?>" /> 
+                    <td>Background: <input type="color" name="stlq_upload_bg" value="<?php echo esc_attr(get_option('stlq_upload_bg', '#f0f0f0')); ?>" />
                         Text: <input type="color" name="stlq_upload_text" value="<?php echo esc_attr(get_option('stlq_upload_text', '#000000')); ?>" /></td>
                 </tr>
 
                 <tr valign="top">
                     <th scope="row">Submit Button Colors</th>
-                    <td>Background: <input type="color" name="stlq_submit_bg" value="<?php echo esc_attr(get_option('stlq_submit_bg', '#0073aa')); ?>" /> 
+                    <td>Background: <input type="color" name="stlq_submit_bg" value="<?php echo esc_attr(get_option('stlq_submit_bg', '#0073aa')); ?>" />
                         Text: <input type="color" name="stlq_submit_text" value="<?php echo esc_attr(get_option('stlq_submit_text', '#ffffff')); ?>" /></td>
                 </tr>
-            
+
                 <tr valign="top">
                     <th scope="row">Liste de couleurs (hex séparés par virgules)</th>
                     <td><input type="text" name="stlq_colors" value="<?php echo esc_attr(get_option('stlq_colors', '#888888,#FF0000,#00FF00,#0000FF')); ?>" style="width:400px;" />

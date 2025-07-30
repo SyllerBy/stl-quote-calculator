@@ -2,7 +2,7 @@
 /**
  * Plugin Name: STL Quote Widget
  * Description: 3D printing quote widget with customizable buttons, Gutenberg & Elementor support.
- * Version: 4.0
+ * Version: 4.5
  * Author: Anton GROGH
  */
 
@@ -10,27 +10,30 @@ if (!defined('ABSPATH')) exit;
 
 // Enqueue frontend assets
 function stlq_enqueue_assets() {
-    wp_enqueue_style('stlq-style', plugin_dir_url(__FILE__) . 'assets/css/style.css', array(), '4.0');
-    wp_enqueue_script('three-js', 'https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js', array(), '0.152.2', true);
-    wp_enqueue_script('orbit-controls', plugin_dir_url(__FILE__) . 'assets/js/OrbitControls.js', array('three-js'), '0.152.2', true);
-    wp_enqueue_script('stl-loader', plugin_dir_url(__FILE__) . 'assets/js/STLLoader.js', array('three-js'), '0.152.2', true);
-    wp_enqueue_script('stlq-main', plugin_dir_url(__FILE__) . 'assets/js/main.js', array('jquery','three-js','orbit-controls','stl-loader'), '4.0', true);
+    wp_enqueue_style('stlq-style', plugin_dir_url(__FILE__) . 'assets/css/style.css', array(), null);
 
-    wp_localize_script('stlq-main', 'stlq_vars', array(
-        'apiurl' => get_option('stlq_api_url', 'https://slicer.payen-shyrei.com'),
-        'defaultColor' => get_option('stlq_default_color', '#888888'),
-        'materials' => explode(',', get_option('stlq_materials', 'PLA,PETG,TPU')),
-        'useWoo' => (bool) get_option('stlq_use_woo', false),
-        'uploadLabel' => get_option('stlq_upload_label', 'Choose file'),
-        'submitLabel' => get_option('stlq_submit_label', 'Get Quote & Preview'),
-        'uploadBg' => get_option('stlq_upload_bg', '#f0f0f0'),
-        'uploadText' => get_option('stlq_upload_text', '#000000'),
-        'submitBg' => get_option('stlq_submit_bg', '#0073aa'),
-        'submitText' => get_option('stlq_submit_text', '#ffffff'),
-        'colors' => explode(',', get_option('stlq_colors', '#888888,#FF0000,#00FF00,#0000FF'))
-    ));
+    wp_enqueue_script_module('three', 'https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.module.min.js', array(), null);
+    wp_enqueue_script_module('three/addons/orbitcontrols', 'https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/controls/OrbitControls.js', array(), null);
+    wp_enqueue_script_module('three/addons/stlloader', 'https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/loaders/STLLoader.js', array(), null);
+    wp_enqueue_script_module('jquery', 'https://cdn.jsdelivr.net/npm/jquery@3.7.1/+esm', array(), null);
+    wp_enqueue_script_module('stlq-main', plugin_dir_url(__FILE__) . 'assets/js/main.js', array('jquery', 'three', 'three/addons/orbitcontrols', 'three/addons/stlloader'), null);
 }
 add_action('wp_enqueue_scripts', 'stlq_enqueue_assets');
+
+add_filter('script_module_data_stlq-main', function(array $data): array {
+    $data['apiurl']       = get_option('stlq_api_url', 'https://slicer.payen-shyrei.com');
+    $data['defaultColor'] = get_option('stlq_default_color', '#888888');
+    $data['materials']    = explode(',', get_option('stlq_materials', 'PLA,PETG,TPU'));
+    $data['useWoo']       = (bool) get_option('stlq_use_woo', false);
+    $data['uploadLabel']  = get_option('stlq_upload_label', 'Choose file');
+    $data['submitLabel']  = get_option('stlq_submit_label', 'Get Quote & Preview');
+    $data['uploadBg']     = get_option('stlq_upload_bg', '#f0f0f0');
+    $data['uploadText']   = get_option('stlq_upload_text', '#000000');
+    $data['submitBg']     = get_option('stlq_submit_bg', '#0073aa');
+    $data['submitText']   = get_option('stlq_submit_text', '#ffffff');
+    $data['colors']       = explode(',', get_option('stlq_colors', '#888888,#FF0000,#00FF00,#0000FF'));
+    return $data;
+});
 
 // Shortcode
 function stlq_shortcode() {
@@ -41,8 +44,22 @@ function stlq_shortcode() {
 add_shortcode('stl_quote_widget', 'stlq_shortcode');
 
 // Gutenberg block
+function stlq_render_block($attributes, $content) {
+    return do_shortcode('[stl_quote_widget]');
+}
+
 function stlq_register_block() {
-    register_block_type(__DIR__ . '/');
+    wp_register_script(
+        'stlq-editor-script',
+        plugins_url('build/index.js', __FILE__),
+        array('wp-blocks', 'wp-element'),
+        false
+    );
+
+    register_block_type(__DIR__, array(
+        'editor_script'   => 'stlq-editor-script',
+        'render_callback' => 'stlq_render_block'
+    ));
 }
 add_action('init', 'stlq_register_block');
 
@@ -150,16 +167,16 @@ function stlq_render_settings_page() { ?>
 
                 <tr valign="top">
                     <th scope="row">Upload Button Colors</th>
-                    <td>Background: <input type="color" name="stlq_upload_bg" value="<?php echo esc_attr(get_option('stlq_upload_bg', '#f0f0f0')); ?>" /> 
+                    <td>Background: <input type="color" name="stlq_upload_bg" value="<?php echo esc_attr(get_option('stlq_upload_bg', '#f0f0f0')); ?>" />
                         Text: <input type="color" name="stlq_upload_text" value="<?php echo esc_attr(get_option('stlq_upload_text', '#000000')); ?>" /></td>
                 </tr>
 
                 <tr valign="top">
                     <th scope="row">Submit Button Colors</th>
-                    <td>Background: <input type="color" name="stlq_submit_bg" value="<?php echo esc_attr(get_option('stlq_submit_bg', '#0073aa')); ?>" /> 
+                    <td>Background: <input type="color" name="stlq_submit_bg" value="<?php echo esc_attr(get_option('stlq_submit_bg', '#0073aa')); ?>" />
                         Text: <input type="color" name="stlq_submit_text" value="<?php echo esc_attr(get_option('stlq_submit_text', '#ffffff')); ?>" /></td>
                 </tr>
-            
+
                 <tr valign="top">
                     <th scope="row">Liste de couleurs (hex séparés par virgules)</th>
                     <td><input type="text" name="stlq_colors" value="<?php echo esc_attr(get_option('stlq_colors', '#888888,#FF0000,#00FF00,#0000FF')); ?>" style="width:400px;" />

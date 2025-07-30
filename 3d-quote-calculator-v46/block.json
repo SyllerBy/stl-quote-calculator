@@ -6,8 +6,6 @@
   "icon": "cart",
   "description": "Display the 3D print quote and checkout widget",
   "keywords": ["stl", "quote", "3d printing"],
-  "version": "3.0.0",
   "textdomain": "stlq-widget",
-  "editorScript": "file:./build/index.js",
-  "render": "stlq_shortcode"
+  "editorScript": "file:./build/index.js"
 }

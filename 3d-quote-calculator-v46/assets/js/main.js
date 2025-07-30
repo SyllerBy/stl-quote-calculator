@@ -2,7 +2,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/orbitcontrols';
 import { STLLoader } from 'three/addons/stlloader';
-import $ from 'https://cdn.jsdelivr.net/npm/jquery@3.7.1/+esm';
+import $ from 'jquery';
 
 // Global state
 let stlq_mesh = null;

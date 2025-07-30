@@ -15,6 +15,7 @@ function stlq_enqueue_assets() {
     wp_enqueue_script_module('three', 'https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.module.min.js', array(), null);
     wp_enqueue_script_module('three/addons/orbitcontrols', 'https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/controls/OrbitControls.js', array(), null);
     wp_enqueue_script_module('three/addons/stlloader', 'https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/loaders/STLLoader.js', array(), null);
+    wp_enqueue_script_module('jquery', 'https://cdn.jsdelivr.net/npm/jquery@3.7.1/+esm', array(), null);
     wp_enqueue_script_module('stlq-main', plugin_dir_url(__FILE__) . 'assets/js/main.js', array('jquery', 'three', 'three/addons/orbitcontrols', 'three/addons/stlloader'), null);
 }
 add_action('wp_enqueue_scripts', 'stlq_enqueue_assets');

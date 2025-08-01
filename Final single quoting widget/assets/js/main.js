@@ -19,8 +19,36 @@ if (scriptTag?.textContent) {
 
 // Wait for DOM ready
 $(function() {
+  // Show uploaded file name
+  $('#stlq_file').on('change', function() {
+    if (this.files && this.files.length > 0) {
+      let name = this.files[0].name;
+      if (name.length > 20) {
+        name = name.substring(0, 17) + '...';
+      }
+      $('#stlq_filename').text(name);
+
+      // Auto-preview when file is uploaded
+      renderSTLPreview(this.files[0]);
+
+    } else {
+      $('#stlq_filename').text('');
+    }
+  });
 
   // Populate color choices from settings
+  const materialSelect = $('#stlq_material');
+  materialSelect.empty();
+
+  if (stlqConfig?.materials && stlqConfig.materials.length > 0) {
+    stlqConfig.materials.forEach(m => {
+      materialSelect.append(`<option value="${m.trim()}">${m.trim()}</option>`);
+    });
+    materialSelect.prop('selectedIndex', 0); // auto-select first
+  } else {
+    materialSelect.append('<option value="">No materials available</option>');
+  }
+
   if (stlqConfig?.colors) {
     const container = $('#stlq_color_choices');
     container.empty();
@@ -79,6 +107,8 @@ $(function() {
     }
     const file = fileInput.files[0];
     const formData = new FormData();
+    // Show spinner while waiting for API
+    $('#stlq_price').html('<div class="spinner"></div>');
     formData.append('file', file);
     formData.append('material_id', $('#stlq_material').val());
     formData.append('infill', $('#stlq_infill').val());
@@ -105,7 +135,7 @@ $(function() {
       $('#stlq_bar').stop().animate({width: '100%'}, 200);
       setTimeout(() => {
         $('#stlq_progress').hide();
-        $('#stlq_price').text('Price: €' + res.costs.total_cost.toFixed(2));
+        $('#stlq_price').html('<strong style="font-size:1em;">' + res.costs.total_cost.toFixed(2) + ' €</strong>');
         if (stlqConfig.useWoo) {
           renderWooButton(res.costs.total_cost);
         } else {

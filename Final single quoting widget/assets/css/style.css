@@ -133,3 +133,148 @@
 .color-choice.selected {
   border: 2px solid #000;
 }
+
+
+.spinner {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #0073aa;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+#stlq_widget {
+  align-items: flex-start;
+}
+
+#stlq_price {
+  margin-top: 0.5em;
+}
+
+
+/* Responsive layout: stack columns on small screens */
+@media (max-width: 768px) {
+  #stlq_widget {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #stlq_widget > div {
+    width: 100%;
+    text-align: center;
+  }
+
+  #stlq_3d {
+    height: 250px;
+  }
+}
+
+
+#stlq_widget {
+  align-items: flex-start;
+}
+
+#stlq_price {
+  text-align: center;
+  margin-top: 0.5em;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  #stlq_widget {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #stlq_widget > div {
+    width: 100%;
+    text-align: center;
+  }
+
+  #stlq_3d {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+
+#stlq_price {
+  text-align: center;
+  margin-top: 0.5em;
+}
+
+
+/* Ensure grey background covers the entire widget */
+#stlq_widget {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+
+/* Wrap colors every 5 items */
+#stlq_color_choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  max-width: 140px; /* 5 circles of ~24px + gaps */
+}
+
+
+/* Force colors to wrap every 5 items */
+#stlq_color_choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  max-width: 150px; /* 5 circles per row */
+}
+
+#stlq_color_choices .color-choice {
+  flex: 0 0 24px; /* fixed width */
+}
+
+
+/* Wrap colors every 7 items */
+#stlq_color_choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  max-width: 210px; /* 7 circles of ~24px + gaps */
+}
+
+#stlq_color_choices .color-choice {
+  flex: 0 0 24px;
+}
+
+
+/* Wrap colors every 10 items */
+#stlq_color_choices {
+  max-width: 300px; /* 10 circles of ~24px + gaps */
+}
+
+
+#stlq_price {
+  font-weight: bold;
+  font-size: 1.5em;
+  color: #222;
+}
+
+
+.fade-in {
+  opacity: 0;
+  animation: fadeInAnim 0.5s forwards ease-in-out;
+}
+
+@keyframes fadeInAnim {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: STL Quote Widget
  * Description: 3D printing quote widget with customizable buttons, Gutenberg & Elementor support.
- * Version: 4.5
+ * Version: 87.26
  * Author: Anton GROGH
  */
 

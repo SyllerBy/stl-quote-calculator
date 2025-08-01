@@ -1,0 +1,11 @@
+{
+  "apiVersion": 2,
+  "name": "stlq/widget",
+  "title": "STL Quote Widget",
+  "category": "widgets",
+  "icon": "cart",
+  "description": "Display the 3D print quote and checkout widget",
+  "keywords": ["stl", "quote", "3d printing"],
+  "textdomain": "stlq-widget",
+  "editorScript": "file:./build/index.js"
+}

@@ -1,0 +1,55 @@
+<div id="stlq_widget" style="max-width:900px; background:#f9f9f9; padding:20px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); display:flex; flex-direction:column; gap:20px;">
+
+  <!-- Top Row: Upload -->
+  <div style="width:100%; margin-bottom:10px;">
+    <input type="file" id="stlq_file" accept=".stl" style="display:none;" />
+    <label for="stlq_file" class="stlq-upload-label">Choisir un fichier</label> 
+    <span id="stlq_filename" style="margin-left:10px;font-size:0.9em;color:#555;"></span>
+  </div>
+
+  <!-- Second Row: Four Columns -->
+  <div style="display:flex; gap:20px; align-items:center; width:100%;">
+
+    <!-- Column 1: Print Settings (Wide) -->
+    <div style="flex:2;">
+      <div style="margin-bottom:1em;">
+        <label>
+          Remplissage:
+          <input type="range" id="stlq_infill" min="0" max="100" value="20" />
+          <span id="stlq_infill_val">20</span>%
+        </label>
+      </div>
+
+      <div style="margin-bottom:1em;">
+        <label>
+          Matériaux:
+          <select id="stlq_material"></select>
+        </label>
+      </div>
+
+      <div style="margin-bottom:1em;">
+        <span>Couleur :</span>
+        <div id="stlq_color_choices"></div>
+      </div>
+    </div>
+
+    <!-- Column 2: 3D Preview -->
+    <div style="flex:1; text-align:center;">
+      <div id="stlq_3d" style="width:150px; height:150px; border:1px solid #ccc; border-radius:4px; margin:auto;"></div>
+    </div>
+
+    <!-- Column 3: Estimation Button -->
+    <div style="flex:1; text-align:center;">
+      <button id="stlq_submit" style="padding:0.5em 1em; font-size:0.9em;">Estimation en ligne</button>
+    </div>
+
+    <!-- Column 4: Price -->
+    <div style="flex:0 0 80px; text-align:center; display:flex; justify-content:center; align-items:center;">
+      <div id="stlq_result" style="display:none;">
+        <p style="font-family: 'Montserrat', sans-serif; font-size:1.1em; margin:0;" id="stlq_price"></p>
+      </div>
+    </div>
+
+  </div>
+
+</div>
